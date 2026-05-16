@@ -1,0 +1,249 @@
+\documentclass[12pt,a4paper]{article}
+
+% ===== Encoding and fonts =====
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage{helvet}
+\usepackage{courier}
+
+% ===== Page geometry (zero margins) =====
+\usepackage[top=0bp,bottom=0bp,left=0bp,right=0bp,headheight=0bp,headsep=0bp,footskip=0bp,paperwidth=595.32bp,paperheight=841.92bp]{geometry}
+
+% ===== Packages =====
+\usepackage[dvipsnames,svgnames,x11names]{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[normalem]{ulem}  % for \uline (underline)
+
+% ===== No default spacing =====
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\pagestyle{empty}
+
+% ===== Custom colours =====
+\definecolor{pdfcolor1}{RGB}{191,192,191}
+\definecolor{pdfcolor2}{RGB}{95,95,95}
+
+\begin{document}
+
+\noindent
+\begin{tikzpicture}[x=1bp,y=-1bp,inner sep=0pt,outer sep=0pt]
+  \useasboundingbox (0,0) rectangle (595.32,841.92);
+  \fill[fill=white] (70.58,316.73) rectangle (524.85,346.61);
+  \fill[fill=black] (72.02,472.03) rectangle (200.56,473.35);
+  \fill[fill=black] (72.02,683.50) rectangle (203.92,684.82);
+  \draw[draw=white,line width=0.75bp] (302.37,302.96) -- (299.16,312.62);
+  \draw[draw=white,line width=0.75bp] (299.16,312.62) -- (305.61,312.62);
+  \draw[draw=white,line width=0.75bp] (305.61,312.62) -- (302.39,302.96);
+  \draw[draw=white,line width=0.75bp] (302.39,302.96) -- (302.37,302.96);
+  \draw[draw=white,line width=0.75bp] (181.32,302.23) -- (181.32,317.70);
+  \draw[draw=white,line width=0.75bp] (181.32,317.70) -- (183.73,317.70);
+  \draw[draw=white,line width=0.75bp] (183.66,302.23) -- (181.32,302.23);
+  \draw[draw=white,line width=0.75bp] (239.06,302.18) -- (239.06,309.90);
+  \draw[draw=white,line width=0.75bp] (239.06,309.90) -- (241.14,309.90);
+  \draw[draw=white,line width=0.75bp] (241.03,302.18) -- (239.06,302.18);
+  \draw[draw=white,line width=0.75bp] (320.66,302.15) -- (320.66,308.60);
+  \draw[draw=white,line width=0.75bp] (320.66,308.60) -- (323.02,308.60);
+  \draw[draw=white,line width=0.75bp] (322.74,302.15) -- (320.66,302.15);
+  \draw[draw=white,line width=0.75bp] (317.41,298.61) -- (323.30,298.61);
+  \draw[draw=white,line width=0.75bp] (330.56,314.82) -- (332.47,319.30);
+  \draw[draw=white,line width=0.75bp] (327.94,320.69) -- (325.90,315.61);
+  \draw[draw=white,line width=0.75bp] (322.10,312.06) -- (320.66,312.06);
+  \draw[draw=white,line width=0.75bp] (320.66,312.06) -- (320.66,320.73);
+  \draw[draw=white,line width=0.75bp] (316.04,320.73) -- (316.04,300.07);
+  \draw[draw=white,line width=0.75bp] (278.41,298.61) -- (289.77,298.61);
+  \draw[draw=white,line width=0.75bp] (289.77,302.23) -- (281.64,302.23);
+  \draw[draw=white,line width=0.75bp] (281.64,302.23) -- (281.64,307.79);
+  \draw[draw=white,line width=0.75bp] (281.64,307.79) -- (288.52,307.79);
+  \draw[draw=white,line width=0.75bp] (288.52,311.32) -- (281.64,311.32);
+  \draw[draw=white,line width=0.75bp] (281.64,311.32) -- (281.64,317.74);
+  \draw[draw=white,line width=0.75bp] (281.64,317.74) -- (289.84,317.74);
+  \draw[draw=white,line width=0.75bp] (289.84,321.36) -- (278.41,321.36);
+  \draw[draw=white,line width=0.75bp] (277.04,319.90) -- (277.04,300.07);
+  \draw[draw=white,line width=0.75bp] (236.00,298.61) -- (241.36,298.61);
+  \draw[draw=white,line width=0.75bp] (240.96,313.47) -- (239.06,313.47);
+  \draw[draw=white,line width=0.75bp] (239.06,313.47) -- (239.06,320.73);
+  \draw[draw=white,line width=0.75bp] (234.44,320.73) -- (234.44,300.27);
+  \draw[draw=white,line width=0.75bp] (218.29,298.61) -- (229.65,298.61);
+  \draw[draw=white,line width=0.75bp] (229.65,302.23) -- (221.52,302.23);
+  \draw[draw=white,line width=0.75bp] (221.52,302.23) -- (221.52,307.79);
+  \draw[draw=white,line width=0.75bp] (221.52,307.79) -- (228.40,307.79);
+  \draw[draw=white,line width=0.75bp] (228.40,311.32) -- (221.52,311.32);
+  \draw[draw=white,line width=0.75bp] (221.52,311.32) -- (221.52,317.74);
+  \draw[draw=white,line width=0.75bp] (221.52,317.74) -- (229.72,317.74);
+  \draw[draw=white,line width=0.75bp] (229.72,321.36) -- (218.29,321.36);
+  \draw[draw=white,line width=0.75bp] (216.92,319.90) -- (216.92,300.07);
+  \draw[draw=white,line width=0.75bp] (200.77,298.61) -- (212.13,298.61);
+  \draw[draw=white,line width=0.75bp] (212.13,302.23) -- (204.00,302.23);
+  \draw[draw=white,line width=0.75bp] (204.00,302.23) -- (204.00,307.79);
+  \draw[draw=white,line width=0.75bp] (204.00,307.79) -- (210.88,307.79);
+  \draw[draw=white,line width=0.75bp] (210.88,311.32) -- (204.00,311.32);
+  \draw[draw=white,line width=0.75bp] (204.00,311.32) -- (204.00,317.74);
+  \draw[draw=white,line width=0.75bp] (204.00,317.74) -- (212.20,317.74);
+  \draw[draw=white,line width=0.75bp] (212.20,321.36) -- (200.77,321.36);
+  \draw[draw=white,line width=0.75bp] (199.40,319.90) -- (199.40,300.07);
+  \draw[draw=white,line width=0.75bp] (178.09,298.61) -- (183.93,298.61);
+  \draw[draw=white,line width=0.75bp] (183.52,321.36) -- (178.09,321.36);
+  \draw[draw=white,line width=0.75bp] (176.72,319.90) -- (176.72,300.07);
+  \draw[draw=white,line width=0.75bp] (388.43,299.30) -- (388.43,319.74);
+  \draw[draw=white,line width=0.75bp] (386.69,321.40) -- (384.73,321.40);
+  \draw[draw=white,line width=0.75bp] (381.32,318.51) -- (375.66,307.88);
+  \draw[draw=white,line width=0.75bp] (373.74,303.69) -- (373.70,303.69);
+  \draw[draw=white,line width=0.75bp] (373.84,308.81) -- (373.84,320.71);
+  \draw[draw=white,line width=0.75bp] (369.68,320.71) -- (369.68,300.27);
+  \draw[draw=white,line width=0.75bp] (371.35,298.61) -- (373.83,298.61);
+  \draw[draw=white,line width=0.75bp] (377.10,300.99) -- (381.53,309.30);
+  \draw[draw=white,line width=0.75bp] (384.36,315.08) -- (384.37,315.08);
+  \draw[draw=white,line width=0.75bp] (384.27,309.97) -- (384.27,299.30);
+  \draw[draw=white,line width=0.75bp] (355.07,299.30) -- (355.07,319.74);
+  \draw[draw=white,line width=0.75bp] (353.33,321.40) -- (351.37,321.40);
+  \draw[draw=white,line width=0.75bp] (347.96,318.51) -- (342.30,307.88);
+  \draw[draw=white,line width=0.75bp] (340.38,303.69) -- (340.34,303.69);
+  \draw[draw=white,line width=0.75bp] (340.48,308.81) -- (340.48,320.71);
+  \draw[draw=white,line width=0.75bp] (336.32,320.71) -- (336.32,300.27);
+  \draw[draw=white,line width=0.75bp] (337.99,298.61) -- (340.47,298.61);
+  \draw[draw=white,line width=0.75bp] (343.74,300.99) -- (348.17,309.30);
+  \draw[draw=white,line width=0.75bp] (351.00,315.08) -- (351.01,315.08);
+  \draw[draw=white,line width=0.75bp] (350.91,309.97) -- (350.91,299.30);
+  \draw[draw=white,line width=0.75bp] (364.72,299.25) -- (364.72,320.73);
+  \draw[draw=white,line width=0.75bp] (360.08,320.73) -- (360.08,299.25);
+  \draw[draw=white,line width=0.75bp] (305.80,299.48) -- (312.83,319.64);
+  \draw[draw=white,line width=0.75bp] (308.21,320.74) -- (306.68,316.17);
+  \draw[draw=white,line width=0.75bp] (306.68,316.17) -- (298.14,316.17);
+  \draw[draw=white,line width=0.75bp] (298.14,316.17) -- (296.69,320.62);
+  \draw[draw=white,line width=0.75bp] (292.44,319.60) -- (299.45,299.42);
+  \draw[draw=white,line width=0.75bp] (266.44,299.25) -- (266.44,317.55);
+  \draw[draw=white,line width=0.75bp] (266.44,317.55) -- (273.59,317.55);
+  \draw[draw=white,line width=0.75bp] (273.59,321.36) -- (263.17,321.36);
+  \draw[draw=white,line width=0.75bp] (261.80,319.90) -- (261.80,299.25);
+  \draw[draw=white,line width=0.75bp] (406.91,317.19) -- (406.91,311.92);
+  \draw[draw=white,line width=0.75bp] (406.91,311.92) -- (402.60,311.92);
+  \draw[draw=white,line width=0.75bp] (402.60,308.42) -- (410.28,308.42);
+  \draw[draw=white,line width=0.75bp] (411.51,309.90) -- (411.51,318.95);
+  \draw[draw=white,line width=0.75bp] (220.43,348.95) -- (217.93,356.45);
+  \draw[draw=white,line width=0.75bp] (217.93,356.45) -- (222.95,356.45);
+  \draw[draw=white,line width=0.75bp] (222.95,356.45) -- (220.45,348.95);
+  \draw[draw=white,line width=0.75bp] (220.45,348.95) -- (220.43,348.95);
+  \draw[draw=white,line width=0.75bp] (356.38,345.57) -- (368.83,345.57);
+  \draw[draw=white,line width=0.75bp] (368.83,348.51) -- (364.40,348.51);
+  \draw[draw=white,line width=0.75bp] (364.40,348.51) -- (364.40,362.75);
+  \draw[draw=white,line width=0.75bp] (360.80,362.75) -- (360.80,348.51);
+  \draw[draw=white,line width=0.75bp] (360.80,348.51) -- (356.38,348.51);
+  \draw[draw=white,line width=0.75bp] (326.63,345.57) -- (335.45,345.57);
+  \draw[draw=white,line width=0.75bp] (335.45,348.39) -- (329.14,348.39);
+  \draw[draw=white,line width=0.75bp] (329.14,348.39) -- (329.14,352.70);
+  \draw[draw=white,line width=0.75bp] (329.14,352.70) -- (334.48,352.70);
+  \draw[draw=white,line width=0.75bp] (334.48,355.44) -- (329.14,355.44);
+  \draw[draw=white,line width=0.75bp] (329.14,355.44) -- (329.14,360.43);
+  \draw[draw=white,line width=0.75bp] (329.14,360.43) -- (335.50,360.43);
+  \draw[draw=white,line width=0.75bp] (335.50,363.24) -- (326.63,363.24);
+  \draw[draw=white,line width=0.75bp] (325.56,362.11) -- (325.56,346.71);
+  \draw[draw=white,line width=0.75bp] (302.44,345.57) -- (304.78,345.57);
+  \draw[draw=white,line width=0.75bp] (307.57,347.61) -- (311.39,358.13);
+  \draw[draw=white,line width=0.75bp] (311.39,358.13) -- (311.45,358.13);
+  \draw[draw=white,line width=0.75bp] (311.45,358.13) -- (315.41,347.64);
+  \draw[draw=white,line width=0.75bp] (317.84,345.57) -- (320.25,345.57);
+  \draw[draw=white,line width=0.75bp] (321.67,347.01) -- (321.67,362.75);
+  \draw[draw=white,line width=0.75bp] (318.27,362.75) -- (318.27,348.37);
+  \draw[draw=white,line width=0.75bp] (318.27,348.37) -- (318.25,348.37);
+  \draw[draw=white,line width=0.75bp] (318.25,348.37) -- (313.13,362.73);
+  \draw[draw=white,line width=0.75bp] (309.45,362.73) -- (304.51,348.37);
+  \draw[draw=white,line width=0.75bp] (304.51,348.37) -- (304.48,348.37);
+  \draw[draw=white,line width=0.75bp] (304.48,348.37) -- (304.48,362.75);
+  \draw[draw=white,line width=0.75bp] (301.08,362.75) -- (301.08,347.01);
+  \draw[draw=white,line width=0.75bp] (353.81,346.11) -- (353.81,361.98);
+  \draw[draw=white,line width=0.75bp] (352.46,363.27) -- (350.93,363.27);
+  \draw[draw=white,line width=0.75bp] (348.28,361.03) -- (343.89,352.77);
+  \draw[draw=white,line width=0.75bp] (342.40,349.52) -- (342.37,349.52);
+  \draw[draw=white,line width=0.75bp] (342.48,353.49) -- (342.48,362.73);
+  \draw[draw=white,line width=0.75bp] (339.24,362.73) -- (339.24,346.86);
+  \draw[draw=white,line width=0.75bp] (340.54,345.57) -- (342.47,345.57);
+  \draw[draw=white,line width=0.75bp] (345.01,347.42) -- (348.45,353.87);
+  \draw[draw=white,line width=0.75bp] (350.64,358.37) -- (350.66,358.37);
+  \draw[draw=white,line width=0.75bp] (350.58,354.39) -- (350.58,346.11);
+  \draw[draw=white,line width=0.75bp] (297.17,346.11) -- (297.17,361.98);
+  \draw[draw=white,line width=0.75bp] (295.82,363.27) -- (294.29,363.27);
+  \draw[draw=white,line width=0.75bp] (291.64,361.03) -- (287.25,352.77);
+  \draw[draw=white,line width=0.75bp] (285.76,349.52) -- (285.73,349.52);
+  \draw[draw=white,line width=0.75bp] (285.84,353.49) -- (285.84,362.73);
+  \draw[draw=white,line width=0.75bp] (282.60,362.73) -- (282.60,346.86);
+  \draw[draw=white,line width=0.75bp] (283.90,345.57) -- (285.83,345.57);
+  \draw[draw=white,line width=0.75bp] (288.37,347.42) -- (291.81,353.87);
+  \draw[draw=white,line width=0.75bp] (294.00,358.37) -- (294.02,358.37);
+  \draw[draw=white,line width=0.75bp] (293.94,354.39) -- (293.94,346.11);
+  \draw[draw=white,line width=0.75bp] (261.01,346.07) -- (261.01,362.75);
+  \draw[draw=white,line width=0.75bp] (257.40,362.75) -- (257.40,346.07);
+  \draw[draw=white,line width=0.75bp] (223.10,346.24) -- (228.56,361.90);
+  \draw[draw=white,line width=0.75bp] (224.97,362.76) -- (223.78,359.21);
+  \draw[draw=white,line width=0.75bp] (223.78,359.21) -- (217.14,359.21);
+  \draw[draw=white,line width=0.75bp] (217.14,359.21) -- (216.02,362.67);
+  \draw[draw=white,line width=0.75bp] (212.72,361.87) -- (218.17,346.20);
+  \draw[draw=white,line width=0.75bp] (275.40,360.00) -- (275.40,355.91);
+  \draw[draw=white,line width=0.75bp] (275.40,355.91) -- (272.05,355.91);
+  \draw[draw=white,line width=0.75bp] (272.05,353.19) -- (278.02,353.19);
+  \draw[draw=white,line width=0.75bp] (278.98,354.34) -- (278.98,361.37);
+  \fill[fill=black] (132.96,399.48) rectangle (451.20,400.92);
+  \fill[fill=pdfcolor1] (24.00,24.00) rectangle (25.44,29.88);
+  \fill[fill=pdfcolor1] (24.00,24.00) rectangle (29.88,25.44);
+  \fill[fill=pdfcolor2] (25.44,25.44) rectangle (28.44,29.88);
+  \fill[fill=pdfcolor2] (25.44,25.44) rectangle (29.88,28.44);
+  \fill[fill=black] (28.44,28.44) rectangle (29.88,29.88);
+  \fill[fill=black] (28.44,28.44) rectangle (29.88,29.88);
+  \fill[fill=pdfcolor1] (29.88,24.00) rectangle (565.56,25.44);
+  \fill[fill=pdfcolor2] (29.88,25.44) rectangle (565.56,28.44);
+  \fill[fill=black] (29.88,28.44) rectangle (565.56,29.88);
+  \fill[fill=pdfcolor1] (570.00,24.00) rectangle (571.44,29.88);
+  \fill[fill=pdfcolor1] (565.56,24.00) rectangle (571.44,25.44);
+  \fill[fill=pdfcolor2] (567.00,25.44) rectangle (570.00,29.88);
+  \fill[fill=pdfcolor2] (565.56,25.44) rectangle (570.00,28.44);
+  \fill[fill=black] (565.56,28.44) rectangle (567.00,29.88);
+  \fill[fill=black] (565.56,28.44) rectangle (567.00,29.88);
+  \fill[fill=pdfcolor1] (24.00,29.88) rectangle (25.44,812.16);
+  \fill[fill=pdfcolor2] (25.44,29.88) rectangle (28.44,812.16);
+  \fill[fill=black] (28.44,29.88) rectangle (29.88,812.16);
+  \fill[fill=pdfcolor1] (570.00,29.88) rectangle (571.44,812.16);
+  \fill[fill=pdfcolor2] (567.00,29.88) rectangle (570.00,812.16);
+  \fill[fill=black] (565.56,29.88) rectangle (567.00,812.16);
+  \fill[fill=pdfcolor1] (24.00,812.16) rectangle (25.44,818.04);
+  \fill[fill=pdfcolor1] (24.00,816.60) rectangle (29.88,818.04);
+  \fill[fill=pdfcolor2] (25.44,812.16) rectangle (28.44,816.60);
+  \fill[fill=pdfcolor2] (25.44,813.60) rectangle (29.88,816.60);
+  \fill[fill=black] (28.44,812.16) rectangle (29.88,813.60);
+  \fill[fill=black] (28.44,812.16) rectangle (29.88,813.60);
+  \fill[fill=pdfcolor1] (29.88,816.60) rectangle (565.56,818.04);
+  \fill[fill=pdfcolor2] (29.88,813.60) rectangle (565.56,816.60);
+  \fill[fill=black] (29.88,812.16) rectangle (565.56,813.60);
+  \fill[fill=pdfcolor1] (570.00,812.16) rectangle (571.44,818.04);
+  \fill[fill=pdfcolor1] (565.56,816.60) rectangle (571.44,818.04);
+  \fill[fill=pdfcolor2] (567.00,812.16) rectangle (570.00,816.60);
+  \fill[fill=pdfcolor2] (565.56,813.60) rectangle (570.00,816.60);
+  \fill[fill=black] (565.56,812.16) rectangle (567.00,813.60);
+  \fill[fill=black] (565.56,812.16) rectangle (567.00,813.60);
+  \node[anchor=north west,inner sep=0pt] at (158.00,279.55) {\includegraphics[width=279.30bp,height=282.45bp]{images/image_p1_1.jpeg}};
+  \node[anchor=north west,inner sep=0pt] at (139.40,47.15) {\includegraphics[width=316.05bp,height=145.70bp]{images/image_p1_2.jpeg}};
+  \node[anchor=north west,inner sep=0pt] at (165.24,196.92) {\includegraphics[width=270.90bp,height=56.22bp]{images/image_p1_3.png}};
+  \node[anchor=north west,inner sep=0pt] at (157.92,230.04) {\includegraphics[width=285.66bp,height=63.30bp]{images/image_p1_4.png}};
+  \node[anchor=north west,inner sep=0pt] at (176.88,298.32) {\includegraphics[width=237.06bp,height=25.74bp]{images/image_p1_5.png}};
+  \node[anchor=north west,inner sep=0pt] at (212.52,345.24) {\includegraphics[width=158.82bp,height=20.34bp]{images/image_p1_6.png}};
+  \node[anchor=north west,inner sep=0pt] at (118.56,368.28) {\includegraphics[width=360.78bp,height=49.86bp]{images/image_p1_7.png}};
+  \node[anchor=north west,inner sep=0pt] at (131.88,398.40) {\includegraphics[width=321.18bp,height=4.38bp]{images/image_p1_8.png}};
+  \node[anchor=north west,inner sep=0pt] at (63.24,403.80) {\includegraphics[width=54.78bp,height=59.70bp]{images/image_p1_9.png}};
+  \node[anchor=north west,inner sep=0pt,outer sep=0pt] at (72.02,454.72) {\textsf{{\fontsize{20.0bp}{24.0bp}\selectfont \textbf{SUBMITTED BY:}}}\textsf{{\fontsize{20.0bp}{24.0bp}\selectfont   }}\textsf{{\fontsize{20.0bp}{24.0bp}\selectfont  }}\textsf{{\fontsize{20.0bp}{24.0bp}\selectfont  }}\textsf{{\fontsize{20.0bp}{24.0bp}\selectfont  }}\textsf{{\fontsize{20.0bp}{24.0bp}\selectfont  }}};
+  \node[anchor=north west,inner sep=0pt,outer sep=0pt] at (72.02,488.65) {\textsf{{\fontsize{16.0bp}{19.2bp}\selectfont \textbf{NAME:}}}\textsf{{\fontsize{16.0bp}{19.2bp}\selectfont  }}\textsf{{\fontsize{18.0bp}{21.6bp}\selectfont Abhishek Chatterjee }}\textsf{{\fontsize{18.0bp}{21.6bp}\selectfont   }}};
+  \node[anchor=north west,inner sep=0pt,outer sep=0pt] at (72.02,518.53) {\textsf{{\fontsize{16.0bp}{19.2bp}\selectfont \textbf{REG. NO:}}}\textsf{{\fontsize{16.0bp}{19.2bp}\selectfont  SBU221026                                    }}\textsf{{\fontsize{18.0bp}{21.6bp}\selectfont  }}};
+  \node[anchor=north west,inner sep=0pt,outer sep=0pt] at (72.02,547.57) {\textsf{{\fontsize{16.0bp}{19.2bp}\selectfont \textbf{SEMESTER:}}}\textsf{{\fontsize{16.0bp}{19.2bp}\selectfont  7}}\textsf{{\fontsize{10.6bp}{12.7bp}\selectfont th}}\textsf{{\fontsize{16.0bp}{19.2bp}\selectfont  (Even)                                        }}\textsf{{\fontsize{18.0bp}{21.6bp}\selectfont  }}};
+  \node[anchor=north west,inner sep=0pt,outer sep=0pt] at (72.02,578.14) {\textsf{{\fontsize{16.0bp}{19.2bp}\selectfont \textbf{ROLL NO:}}}\textsf{{\fontsize{16.0bp}{19.2bp}\selectfont  BTCS22R120 }}};
+  \node[anchor=north west,inner sep=0pt,outer sep=0pt] at (72.02,607.21) {\textsf{{\fontsize{16.0bp}{19.2bp}\selectfont \textbf{SEC: }}}\textsf{{\fontsize{16.0bp}{19.2bp}\selectfont “A” }}};
+  \node[anchor=north west,inner sep=0pt,outer sep=0pt] at (72.02,666.19) {\textsf{{\fontsize{20.0bp}{24.0bp}\selectfont \textbf{SUBMITTED TO: }}}};
+  \node[anchor=north west,inner sep=0pt,outer sep=0pt] at (72.02,696.67) {\textsf{{\fontsize{16.0bp}{19.2bp}\selectfont \textbf{FACULTY NAME: }}}\textsf{{\fontsize{16.0bp}{19.2bp}\selectfont Dr. Sandip Kumar Singh Modak}}\textsf{{\fontsize{20.0bp}{24.0bp}\selectfont  }}};
+  \node[anchor=north west,inner sep=0pt,outer sep=0pt,text width=273.66bp] at (176.30,205.37) {\textsf{{\fontsize{28.0bp}{33.6bp}\selectfont BTECH(CSE) AI\&ML }} \\
+\textsf{{\fontsize{28.0bp}{33.6bp}\selectfont SESSION: 2022-2026 }}};
+  \node[anchor=north west,inner sep=0pt,outer sep=0pt] at (72.38,380.54) {\textsf{{\fontsize{22.0bp}{26.4bp}\selectfont [COURSE CODE: PEC-CSE-AIML-702] }} \\
+\textsf{{\fontsize{36.0bp}{43.2bp}\selectfont  }}};
+\end{tikzpicture}
+
+\end{document}
