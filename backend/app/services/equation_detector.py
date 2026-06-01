@@ -77,7 +77,7 @@ class EquationDetector:
         Determine if an entire text block is a mathematical equation.
         """
         # Short blocks with lots of math symbols
-        math_char_count = sum(1 for c in text if c in self.MATH_SYMBOLS or c in "=+-*/^_{}()")
+        math_char_count = sum(1 for c in text if c in self.MATH_SYMBOLS or c in "=+-*/^_{}")
         total_chars = len(text)
 
         if total_chars == 0:

@@ -43,6 +43,30 @@ class TableDetector:
             # Fallback: try line-based detection
             tables = self._detect_from_lines(page, page_num)
 
+        # Remove nested/outer tables (e.g. giant layout boxes containing actual tables)
+        filtered_tables = []
+        for i, t1 in enumerate(tables):
+            is_outer = False
+            for j, t2 in enumerate(tables):
+                if i == j:
+                    continue
+                t1_x1, t1_y1 = t1.x, t1.y
+                t1_x2, t1_y2 = t1.x + t1.width, t1.y + t1.height
+                t2_x1, t2_y1 = t2.x, t2.y
+                t2_x2, t2_y2 = t2.x + t2.width, t2.y + t2.height
+                
+                # Check containment with 2 points tolerance
+                if (t1_x1 <= t2_x1 + 2 and t1_y1 <= t2_y1 + 2 and 
+                    t1_x2 >= t2_x2 - 2 and t1_y2 >= t2_y2 - 2):
+                    area1 = t1.width * t1.height
+                    area2 = t2.width * t2.height
+                    if area1 > area2 * 1.1:
+                        is_outer = True
+                        break
+            if not is_outer:
+                filtered_tables.append(t1)
+        tables = filtered_tables
+
         return tables
 
     def _process_table(self, table, page: fitz.Page, page_num: int) -> TableBlock:

@@ -51,6 +51,21 @@ class PDFParser:
         """
         logger.info(f"Starting PDF parsing: {self.pdf_path}")
 
+        try:
+            with open("diagnostics_log.txt", "w", encoding="utf-8") as out:
+                out.write(f"=== Diagnosing PDF: {self.pdf_path} ===\n")
+                page = self.doc[0]
+                page_dict = page.get_text("dict")
+                for b_idx, b in enumerate(page_dict.get("blocks", [])):
+                    if b.get("type") == 0:
+                        out.write(f"\nBlock {b_idx}: bbox={b.get('bbox')}\n")
+                        for l_idx, line in enumerate(b.get("lines", [])):
+                            out.write(f"  Line {l_idx}: bbox={line.get('bbox')}\n")
+                            for s_idx, span in enumerate(line.get("spans", [])):
+                                out.write(f"    Span {s_idx}: bbox={span.get('bbox')} text={repr(span.get('text'))}\n")
+        except Exception as e:
+            logger.error(f"Diagnostics failed: {e}")
+
         total_pages = len(self.doc)
         all_text_blocks = []
         all_image_blocks = []
@@ -72,11 +87,9 @@ class PDFParser:
 
             # 2. Text extraction with formatting
             text_blocks = self.text_extractor.extract(page, page_num)
-            all_text_blocks.extend(text_blocks)
 
             # 3. Image extraction
             image_blocks = self.image_extractor.extract(page, page_num)
-            all_image_blocks.extend(image_blocks)
 
             # 4. Table detection
             table_blocks = self.table_detector.detect(page, page_num)
@@ -87,6 +100,42 @@ class PDFParser:
                 page, page_num, text_blocks
             )
             all_equation_blocks.extend(equation_blocks)
+
+            # Filter out duplicate image blocks that overlap significantly with text blocks
+            filtered_image_blocks = []
+            for img in image_blocks:
+                is_duplicate = False
+                img_area = img.width * img.height
+                if img_area > 0:
+                    for txt in text_blocks:
+                        txt_area = txt.width * txt.height
+                        if txt_area > 0:
+                            # Calculate intersection bounding box
+                            x_left = max(img.x, txt.x)
+                            y_top = max(img.y, txt.y)
+                            x_right = min(img.x + img.width, txt.x + txt.width)
+                            y_bottom = min(img.y + img.height, txt.y + txt.height)
+                            
+                            if x_right > x_left and y_bottom > y_top:
+                                inter_area = (x_right - x_left) * (y_bottom - y_top)
+                                if (inter_area / txt_area > 0.7) and (img_area / txt_area < 2.5):
+                                    is_duplicate = True
+                                    logger.info(f"Filtering out duplicate image block {img.filename} overlapping with text '{txt.text}'")
+                                    break
+                if not is_duplicate:
+                    filtered_image_blocks.append(img)
+            
+            all_image_blocks.extend(filtered_image_blocks)
+
+            # Filter out text blocks that are display equations (so we don't render them twice)
+            display_eq_coords = {
+                (eq.x, eq.y) for eq in equation_blocks if not eq.inline
+            }
+            filtered_text_blocks = [
+                b for b in text_blocks
+                if (b.x, b.y) not in display_eq_coords
+            ]
+            all_text_blocks.extend(filtered_text_blocks)
 
         # Extract document metadata
         metadata = self.doc.metadata or {}
@@ -173,21 +222,7 @@ class PDFParser:
     def _remove_table_overlaps(self, text_blocks, table_blocks):
         """
         Remove text blocks that fall within detected table regions.
+        We return all text blocks unmodified to ensure table cell contents
+        are rendered at their exact absolute positions.
         """
-        if not table_blocks:
-            return text_blocks
-
-        filtered = []
-        for tb in text_blocks:
-            overlaps = False
-            for table in table_blocks:
-                if (tb.page == table.page and
-                    tb.x >= table.x - 5 and
-                    tb.y >= table.y - 5 and
-                    tb.x + tb.width <= table.x + table.width + 5 and
-                    tb.y + tb.height <= table.y + table.height + 5):
-                    overlaps = True
-                    break
-            if not overlaps:
-                filtered.append(tb)
-        return filtered
+        return text_blocks

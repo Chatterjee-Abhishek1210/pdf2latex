@@ -168,6 +168,11 @@ class LaTeXGenerator:
         lines.append("\\setlength{\\parskip}{0pt}")
         lines.append("\\pagestyle{empty}")
 
+        # Currency / special symbols
+        lines += ["", "% ===== Currency symbols ====="]
+        lines.append("\\usepackage{textcomp}")
+        lines.append("\\newcommand{\\rupee}{\\textrm{Rs.}}")  # fallback ₹
+
         # Custom colours
         if self.defined_colors:
             lines += ["", "% ===== Custom colours ====="]
@@ -261,28 +266,57 @@ class LaTeXGenerator:
             return self._draw_rect(d)
         elif d.draw_type == "line":
             return self._draw_line(d)
+        elif d.draw_type == "path":
+            return self._draw_path(d)
         return ""
+
+    @staticmethod
+    def _opacity_options(d: DrawingElement) -> List[str]:
+        """Return TikZ opacity keys when they differ from the default 1.0."""
+        opts: List[str] = []
+        if d.fill_opacity < 1.0:
+            opts.append(f"fill opacity={d.fill_opacity:.3f}")
+        if d.stroke_opacity < 1.0:
+            opts.append(f"draw opacity={d.stroke_opacity:.3f}")
+        return opts
 
     def _draw_rect(self, d: DrawingElement) -> str:
         options: List[str] = []
+        has_fill = False
+        has_stroke = False
+
         if d.fill_color:
             c = self._get_color_name(d.fill_color)
             if c:
                 options.append(f"fill={c}")
+                has_fill = True
         if d.stroke_color:
             c = self._get_color_name(d.stroke_color)
             if c:
                 options.append(f"draw={c}")
+                has_stroke = True
             if d.stroke_width and d.stroke_width > 0:
                 options.append(f"line width={d.stroke_width:.2f}bp")
+        
+        options += self._opacity_options(d)
         if not options:
             return ""
 
         opt_str = ",".join(options)
         x1 = d.x + d.width
         y1 = d.y + d.height
+
+        if has_fill and has_stroke:
+            cmd = "\\filldraw"
+        elif has_fill:
+            cmd = "\\fill"
+        elif has_stroke:
+            cmd = "\\draw"
+        else:
+            cmd = "\\path"
+
         return (
-            f"  \\fill[{opt_str}] ({d.x:.2f},{d.y:.2f}) "
+            f"  {cmd}[{opt_str}] ({d.x:.2f},{d.y:.2f}) "
             f"rectangle ({x1:.2f},{y1:.2f});"
         )
 
@@ -292,11 +326,56 @@ class LaTeXGenerator:
         options.append(f"draw={c}")
         if d.stroke_width and d.stroke_width > 0:
             options.append(f"line width={d.stroke_width:.2f}bp")
+        options += self._opacity_options(d)
         opt_str = ",".join(options)
         return (
             f"  \\draw[{opt_str}] ({d.x:.2f},{d.y:.2f}) "
             f"-- ({d.x2:.2f},{d.y2:.2f});"
         )
+
+    def _draw_path(self, d: DrawingElement) -> str:
+        """Emit a pre-built TikZ path with correct fill/stroke/opacity."""
+        if not d.path_data:
+            return ""
+        options: List[str] = []
+        has_fill = False
+        has_stroke = False
+
+        if d.fill_color:
+            c = self._get_color_name(d.fill_color)
+            if c:
+                options.append(f"fill={c}")
+                has_fill = True
+        if d.stroke_color:
+            c = self._get_color_name(d.stroke_color)
+            if c:
+                options.append(f"draw={c}")
+                has_stroke = True
+            if d.stroke_width and d.stroke_width > 0:
+                options.append(f"line width={d.stroke_width:.2f}bp")
+        
+        options += self._opacity_options(d)
+        if not options:
+            options.append("fill=black")
+            has_fill = True
+
+        opt_str = ",".join(options)
+        
+        if has_fill and has_stroke:
+            cmd = "\\filldraw"
+        elif has_fill:
+            cmd = "\\fill"
+        elif has_stroke:
+            cmd = "\\draw"
+        else:
+            cmd = "\\path"
+
+        # Check if path_data already ends with cycle/-- cycle
+        path_str = d.path_data.strip()
+        if path_str.endswith("cycle") or path_str.endswith("-- cycle"):
+            return f"  {cmd}[{opt_str}] {path_str};"
+        else:
+            return f"  {cmd}[{opt_str}] {path_str} -- cycle;"
 
     # ──────────────────────────────────────────────────────────────
     #  Images
@@ -316,37 +395,42 @@ class LaTeXGenerator:
     def _place_text_block(self, block: TextBlock, page_h: float = 0) -> str:
         """
         Place a text block at its absolute position.
-
-        Key fixes:
-        - Single-line blocks: NO text width constraint (prevents wrapping)
-        - Multi-line blocks: generous text width (1.15x original)
-        - Exact font size via \\fontsize{X}{1.2X}\\selectfont
-        - Underline support via \\uline
+        If spans are present, render each span as a separate absolute node
+        to guarantee 100% pixel-perfect positioning and prevent different
+        font metrics in LaTeX from shifting text or breaking columns.
         """
+        if block.spans:
+            lines = []
+            for span in block.spans:
+                text = self._escape_latex(span.text)
+                if not text.strip() and not text:
+                    continue
+                
+                # Apply font formatting to this specific span
+                inner = self._apply_font_formatting(text, span.font)
+                
+                # Since spans are single-line, we do not set text width (prevents wrapping)
+                node_opts = "anchor=north west,inner sep=0pt,outer sep=0pt"
+                lines.append(
+                    f"  \\node[{node_opts}] at ({span.x:.2f},{span.y:.2f}) "
+                    f"{{{inner}}};"
+                )
+            return "\n".join(lines)
+
+        # Fallback if no spans are present: render block text as a single node
         x = block.x
         y = block.y
         w = block.width
-
-        # Build formatted text content
-        if block.spans:
-            inner = self._render_spans(block.spans)
-        else:
-            inner = self._render_block_text(block)
-
-        # Decide whether to constrain text width
-        # Single-line blocks should NOT have text width set
-        # to avoid wrapping when LaTeX font metrics differ from PDF
+        inner = self._render_block_text(block)
         is_multiline = block.line_count > 1
 
         if is_multiline:
-            # Use generous width to prevent premature wrapping
             generous_w = w * 1.15
             node_opts = (
                 f"anchor=north west,inner sep=0pt,outer sep=0pt,"
                 f"text width={generous_w:.2f}bp"
             )
         else:
-            # No text width — let TikZ auto-size the node
             node_opts = "anchor=north west,inner sep=0pt,outer sep=0pt"
 
         return (
@@ -426,7 +510,7 @@ class LaTeXGenerator:
     #  Tables
     # ──────────────────────────────────────────────────────────────
     def _place_table(self, block: TableBlock, page_h: float = 0) -> str:
-        col_aligns = []
+        return ""
         for c in range(block.cols):
             alignments = [
                 cell.alignment for cell in block.cells if cell.col == c
@@ -479,9 +563,9 @@ class LaTeXGenerator:
     # ──────────────────────────────────────────────────────────────
     def _place_equation(self, eq: EquationBlock, page_h: float = 0) -> str:
         if eq.inline:
-            content = f"${eq.latex}$"
-        else:
-            content = f"$\\displaystyle {eq.latex}$"
+            return ""
+
+        content = f"$\\displaystyle {eq.latex}$"
 
         return (
             f"  \\node[anchor=north west,inner sep=0pt] "
@@ -510,6 +594,31 @@ class LaTeXGenerator:
         result = text
         for char, escaped in special_chars.items():
             result = result.replace(char, escaped)
+
+        # Unicode characters that pdfLaTeX cannot handle natively
+        unicode_map = {
+            '₹': r'{\textrm{\rupee}}',   # handled via textcomp or custom def
+            '©': r'\textcopyright{}',
+            '®': r'\textregistered{}',
+            '™': r'\texttrademark{}',
+            '°': r'\textdegree{}',
+            '€': r'\texteuro{}',
+            '£': r'\textsterling{}',
+            '¥': r'\textyen{}',
+            '\u00a0': ' ',                # non-breaking space → normal space
+            '–': '--',                    # en-dash
+            '—': '---',                   # em-dash
+            '"': "``",                    # left double quote
+            '"': "''",                    # right double quote
+            ''': "`",                     # left single quote
+            ''': "'",                     # right single quote
+            '…': '...',                   # ellipsis
+        }
+        for char, escaped in unicode_map.items():
+            result = result.replace(char, escaped)
+
+        # Prevent space collapse by replacing consecutive spaces with ~
+        result = re.sub(r' {2,}', lambda m: '~' * len(m.group(0)), result)
 
         return result
 

@@ -176,9 +176,14 @@ class LayoutAnalyzer:
     def _extract_drawings(self, page: fitz.Page, page_num: int) -> List[DrawingElement]:
         """
         Extract all drawn shapes from a page:
-        filled rectangles, stroked rectangles, lines, and rules.
-        These are essential for reproducing borders, shading, and
-        decorative elements pixel-perfectly.
+        filled rectangles, stroked rectangles, lines, curves, and rules.
+
+        For complex drawings that mix lines and Bézier curves (e.g. check-marks,
+        currency symbols) we emit a single ``path`` element carrying the full
+        pre-built TikZ path string so the generator can just drop it in.
+
+        Opacity values (``fill_opacity`` / ``stroke_opacity``) are preserved so
+        semi-transparent drop-shadows render correctly instead of solid black.
         """
         elements = []
         page_rect = page.rect
@@ -196,6 +201,12 @@ class LayoutAnalyzer:
             if stroke_width is None:
                 stroke_width = 0.5
             d_rect = d.get("rect")
+            fill_opacity = d.get("fill_opacity", 1.0)
+            stroke_opacity = d.get("stroke_opacity")
+            if fill_opacity is None:
+                fill_opacity = 1.0
+            if stroke_opacity is None:
+                stroke_opacity = 1.0
 
             # Convert fill/stroke to hex
             fill_hex = None
@@ -222,6 +233,29 @@ class LayoutAnalyzer:
 
             # Process each drawing item
             items = d.get("items", [])
+
+            # ---- Complex path (has curves, or many items) ----
+            has_curves = any(item[0] == "c" for item in items)
+            if has_curves or (len(items) > 1 and not self._is_single_rect(items)):
+                path_str = self._build_tikz_path(items)
+                if path_str:
+                    elements.append(DrawingElement(
+                        draw_type="path",
+                        x=d_rect.x0 if d_rect else 0,
+                        y=d_rect.y0 if d_rect else 0,
+                        width=d_rect.width if d_rect else 0,
+                        height=d_rect.height if d_rect else 0,
+                        page=page_num,
+                        fill_color=fill_hex,
+                        stroke_color=stroke_hex,
+                        stroke_width=stroke_width if stroke_hex else 0,
+                        fill_opacity=fill_opacity,
+                        stroke_opacity=stroke_opacity,
+                        path_data=path_str,
+                    ))
+                continue
+
+            # ---- Simple primitives ----
             for item in items:
                 kind = item[0]  # "l" = line, "re" = rect, "qu" = quad, "c" = curve
 
@@ -241,6 +275,8 @@ class LayoutAnalyzer:
                         fill_color=fill_hex,
                         stroke_color=stroke_hex,
                         stroke_width=stroke_width if stroke_hex else 0,
+                        fill_opacity=fill_opacity,
+                        stroke_opacity=stroke_opacity,
                     ))
 
                 elif kind == "l":
@@ -259,6 +295,8 @@ class LayoutAnalyzer:
                         fill_color=None,
                         stroke_color=stroke_hex or "#000000",
                         stroke_width=stroke_width,
+                        fill_opacity=fill_opacity,
+                        stroke_opacity=stroke_opacity,
                     ))
 
             # If no items but we have a rect with fill/stroke, use d_rect
@@ -275,7 +313,70 @@ class LayoutAnalyzer:
                             fill_color=fill_hex,
                             stroke_color=stroke_hex,
                             stroke_width=stroke_width if stroke_hex else 0,
+                            fill_opacity=fill_opacity,
+                            stroke_opacity=stroke_opacity,
                         ))
 
         logger.debug(f"Extracted {len(elements)} drawing elements from page {page_num + 1}")
         return elements
+
+    # ----------------------------------------------------------------
+    #  Helpers for path building
+    # ----------------------------------------------------------------
+    @staticmethod
+    def _is_single_rect(items) -> bool:
+        """Return True if items is exactly one 're' entry."""
+        return len(items) == 1 and items[0][0] == "re"
+
+    @staticmethod
+    def _build_tikz_path(items) -> str:
+        """
+        Convert a list of PyMuPDF drawing items into a TikZ path string.
+
+        Supported item kinds:
+          'l' (line-to), 'c' (cubic Bézier), 're' (rect), 'qu' (quad)
+        """
+        parts: list[str] = []
+        last_pt = None
+
+        for item in items:
+            kind = item[0]
+            if kind == "l":
+                p1 = item[1]
+                p2 = item[2]
+                # Check if we need a move-to (if path is empty or disjoint)
+                if last_pt is None:
+                    parts.append(f"({p1.x:.2f},{p1.y:.2f})")
+                elif abs(p1.x - last_pt[0]) > 0.05 or abs(p1.y - last_pt[1]) > 0.05:
+                    parts.append(f"({p1.x:.2f},{p1.y:.2f})")
+                
+                parts.append(f"-- ({p2.x:.2f},{p2.y:.2f})")
+                last_pt = (p2.x, p2.y)
+
+            elif kind == "c":
+                p0 = item[1]
+                c1 = item[2]
+                c2 = item[3]
+                p1 = item[4]
+                if last_pt is None:
+                    parts.append(f"({p0.x:.2f},{p0.y:.2f})")
+                elif abs(p0.x - last_pt[0]) > 0.05 or abs(p0.y - last_pt[1]) > 0.05:
+                    parts.append(f"({p0.x:.2f},{p0.y:.2f})")
+                
+                parts.append(
+                    f".. controls ({c1.x:.2f},{c1.y:.2f}) "
+                    f"and ({c2.x:.2f},{c2.y:.2f}) "
+                    f".. ({p1.x:.2f},{p1.y:.2f})"
+                )
+                last_pt = (p1.x, p1.y)
+
+            elif kind == "re":
+                r = item[1]
+                parts.append(
+                    f"({r.x0:.2f},{r.y0:.2f}) rectangle ({r.x1:.2f},{r.y1:.2f})"
+                )
+                last_pt = None  # Reset last_pt because rectangle is a closed subpath
+
+        if not parts:
+            return ""
+        return " ".join(parts)

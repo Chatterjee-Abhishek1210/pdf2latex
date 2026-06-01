@@ -124,6 +124,11 @@ class DrawingElement(BaseModel):
     # For lines
     x2: float = 0
     y2: float = 0
+    # Opacity (0.0–1.0)
+    fill_opacity: float = 1.0
+    stroke_opacity: float = 1.0
+    # Pre-built TikZ path string for complex shapes (curves, etc.)
+    path_data: str = ""
 
 
 class PageLayout(BaseModel):
