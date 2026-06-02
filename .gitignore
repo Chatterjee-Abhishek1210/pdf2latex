@@ -1,0 +1,18 @@
+# Python virtual environment
+backend/venv/
+__pycache__/
+*.pyc
+
+# Local uploads and generated outputs
+backend/uploads/
+backend/outputs/
+backend/temp/
+
+# Log files
+backend/diagnostics_log.txt
+*.log
+*.aux
+
+# Local OS files
+.DS_Store
+Thumbs.db
