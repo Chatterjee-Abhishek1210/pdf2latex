@@ -5,6 +5,7 @@ import React from 'react'
  * All icons inherit currentColor and allow size customization.
  */
 
+
 export const UploadIcon = ({ size = 16, className = '' }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
