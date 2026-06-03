@@ -6,6 +6,7 @@ import subprocess
 import logging
 import shutil
 from pathlib import Path
+from app.config import LATEX_COMPILER
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +16,7 @@ class LaTeXCompiler:
     Compiles LaTeX source code to PDF using xelatex or pdflatex.
     """
 
-    def __init__(self, compiler: str = "pdflatex"):
+    def __init__(self, compiler: str = LATEX_COMPILER):
         self.compiler = compiler
         # Check if compiler is available
         self.available = shutil.which(compiler) is not None

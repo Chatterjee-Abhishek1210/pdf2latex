@@ -8,7 +8,7 @@ import json
 from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 
-from app.config import UPLOAD_DIR, OUTPUT_DIR
+from app.config import UPLOAD_DIR, OUTPUT_DIR, LATEX_COMPILER
 from app.services.pdf_parser import PDFParser
 from app.services.latex_generator import LaTeXGenerator
 from app.services.latex_compiler import LaTeXCompiler
@@ -94,7 +94,7 @@ async def _run_conversion(job_id: str, pdf_path: str, output_dir: str):
         _update_job(job_id, 75, "compiling", "Compiling LaTeX to PDF...")
 
         # Step 3: Compile LaTeX (optional)
-        compiler = LaTeXCompiler()
+        compiler = LaTeXCompiler(compiler=LATEX_COMPILER)
         compile_result = await asyncio.get_event_loop().run_in_executor(
             None, lambda: compiler.compile(tex_path, output_dir)
         )
